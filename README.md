@@ -1,5 +1,7 @@
 # ProjetoCompiladoresIsidro
 
+Os arquivos input.isi, main e Isi.g4 foram feitos a mão, o resto foi gerado pelo antlr4
+
 ## Para gerar as classes que são exigidas na main:
 
 Instale o antlr, e coloque ele na variavel de ambiente, de preferencia, tente usar as mesmas versões.
