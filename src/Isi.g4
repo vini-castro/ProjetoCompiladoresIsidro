@@ -18,7 +18,7 @@ cmd : cmdLeitura | cmdEscrita | cmdExpr | cmdIf
 cmdLeitura : 'leia' AP ID FP Ponto
 ;
 
-cmdEscrita : 'escreva' AP ASPAS TEXTO ASPAS FP Ponto
+cmdEscrita : 'escreva' ((AP TEXTO FP Ponto) | AP ID FP Ponto)
 ;
 
 cmdExpr : ID ':=' expr Ponto
@@ -27,7 +27,7 @@ cmdExpr : ID ':=' expr Ponto
 cmdIf : 'if' AP expr OP_REL expr FP '{' cmd+ '}' ('else' '{' cmd+ '}')?
 ;
 
-expr : termo (OP termo)?
+expr : termo (OP termo)*
 ;
 
 termo : ID | NUMBER
@@ -46,9 +46,6 @@ Ponto : '.'
 OP : '+' | '-' | '*' | '/'
 ;
 
-ATTR : ':='
-;
-
 ID : ([a-z] | [A-Z]) ([a-z] | [A-Z] | [0-9])*
 ;
 
@@ -61,10 +58,9 @@ ASPAS : '"'
 OP_REL : '<' | '>' | '<=' | '>=' | '!=' | '=='
 ;
 
-TEXTO : ([0-9] | [a-z] | [A-Z] | ' ')+
+TEXTO: '"' ([a-z]|[A-Z]|[0-9]|' '|'\t'|'!'|'-')* '"'
 ;
 
 //white space
 WS : (' '| '\t' | '\n' | '\r')+ -> skip
 ;
-
