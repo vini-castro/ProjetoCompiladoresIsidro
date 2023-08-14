@@ -3,28 +3,31 @@
 
 grammar Isi;
 
-prog : 'programa' 'fimprog.'
+prog : 'programa' declara bloco 'fimprog.'
 ;
 
-declara : 'declare' ID (','ID)* '.'
+declara : 'declare' ID (',' ID)* Ponto
 ;
 
-bloco : (cmd. )+
+bloco : (cmd)+
 ;
 
-cmd : cmdLeitura | cmdEscrita | cmdAttrib
+cmd : cmdLeitura | cmdEscrita | cmdExpr | cmdIf
 ;
 
 cmdLeitura : 'leia' AP ID FP Ponto
 ;
 
-cmdEscrita : 'escreva' AP ID FP Ponto
+cmdEscrita : 'escreva' AP ASPAS TEXTO ASPAS FP Ponto
 ;
 
-cmdAttrib : ID ATTR expr Ponto
+cmdExpr : ID ':=' expr Ponto
 ;
 
-expr : termo ( OP termo)*
+cmdIf : 'if' AP expr OP_REL expr FP '{' cmd+ '}' ('else' '{' cmd+ '}')?
+;
+
+expr : termo (OP termo)?
 ;
 
 termo : ID | NUMBER
@@ -43,16 +46,25 @@ Ponto : '.'
 OP : '+' | '-' | '*' | '/'
 ;
 
-ATTR : '='
+ATTR : ':='
 ;
 
-ID : [a-z] ([a-z] | [A-Z] | [0-9])*
+ID : ([a-z] | [A-Z]) ([a-z] | [A-Z] | [0-9])*
 ;
 
 NUMBER : [0-9]+ ('.' [0.9]+)?
 ;
 
+ASPAS : '"'
+;
+
+OP_REL : '<' | '>' | '<=' | '>=' | '!=' | '=='
+;
+
+TEXTO : ([0-9] | [a-z] | [A-Z] | ' ')+
+;
+
 //white space
-WS : (' ' | '\t' | '\n' | '\r') -> skip
+WS : (' '| '\t' | '\n' | '\r')+ -> skip
 ;
 
