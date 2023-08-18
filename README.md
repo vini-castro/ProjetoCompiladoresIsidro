@@ -22,7 +22,7 @@ Os arquivos serão gerados, e se der tudo certo, o código executara a entrada i
 | 2    | Possui a estrutura If.. else                                     | OK       |
 | 3    | Possui estrutura de controle while/do while                      | OK       |
 | 4    | Operações Aritméticas executadas corretamente                    |          |
-| 5    | Atribuições realizadas corretamente                              |          |
+| 5    | Atribuições realizadas corretamente                              | OK       |
 | 6    | Possui operações de Entrada e Saída                              | OK       |
 | 7    | Aceita números decimais                                          | OK       |
 | 8    | Verificar se a variável já foi previamente declarada             | OK       |
