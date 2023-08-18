@@ -29,3 +29,4 @@ Os arquivos serão gerados, e se der tudo certo, o código executara a entrada i
 | 9    | Verificar se a variável foi declarada e não foi usada            | OK                |                |
 | 10   | Verificar se uma variável está sendo usada sem ter valor inicial |                   |                |
 
+
