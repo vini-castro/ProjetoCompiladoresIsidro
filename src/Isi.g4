@@ -50,7 +50,7 @@ declara : 'declare' ID {
 bloco : (cmd)+
 ;
 
-cmd : cmdLeitura | cmdEscrita | cmdExpr | cmdIf
+cmd : cmdLeitura | cmdEscrita | cmdExpr | cmdIf | cmdWhile
 ;
 
 //cmdLeitura : 'leia' AP ID FP Ponto
@@ -86,6 +86,9 @@ cmdExpr : ID{ _varName = _input.LT(-1).getText();
 cmdIf : 'if' AP expr OP_REL expr FP '{' cmd+ '}' ('else' '{' cmd+ '}')?
 ;
 
+cmdWhile : 'while' AP expr OP_REL expr FP '{' cmd+ '}'
+;
+
 expr : termo (OP termo)*
 ;
 
@@ -113,7 +116,7 @@ OP : '+' | '-' | '*' | '/'
 ID : ([a-z] | [A-Z]) ([a-z] | [A-Z] | [0-9])*
 ;
 
-NUMBER : [0-9]+ ('.' [0.9]+)?
+NUMBER : [0-9]+ ('.' [0-9]+)?
 ;
 
 OP_REL : '<' | '>' | '<=' | '>=' | '!=' | '=='

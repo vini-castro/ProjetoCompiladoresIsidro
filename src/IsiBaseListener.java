@@ -117,6 +117,18 @@ public class IsiBaseListener implements IsiListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCmdWhile(IsiParser.CmdWhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCmdWhile(IsiParser.CmdWhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExpr(IsiParser.ExprContext ctx) { }
 	/**
 	 * {@inheritDoc}

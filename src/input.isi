@@ -5,12 +5,9 @@ escreva ("Digite A").
 leia (a).
 escreva ("Digite B").
 
-if (a<b)
+while (a<b)
     {
      c := a + b.
-    }else
-    {
-     c := a - b.
     }
 
 escreva ("C e igual a").
