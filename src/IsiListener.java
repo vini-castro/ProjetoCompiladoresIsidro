@@ -1,4 +1,10 @@
 // Generated from Isi.g4 by ANTLR 4.7.2
+
+	import datastructures.IsiSymbol;
+	import datastructures.IsiVariable;
+	import datastructures.IsiSymbolTable;
+	import exceptions.IsiSemanticException;
+
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**

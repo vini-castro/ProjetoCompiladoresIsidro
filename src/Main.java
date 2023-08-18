@@ -21,7 +21,7 @@ public class Main {
             System.out.println("Compilacao bem sucedida");
         }
         catch(Exception e){
-            System.out.println("Caiu na exception: "+e.getMessage()+" "+e.getCause());
+            System.out.println("Existe uma exception: "+e.getMessage());
         }
     }
 }

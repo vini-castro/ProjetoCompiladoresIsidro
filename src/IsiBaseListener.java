@@ -1,5 +1,11 @@
 // Generated from Isi.g4 by ANTLR 4.7.2
 
+	import datastructures.IsiSymbol;
+	import datastructures.IsiVariable;
+	import datastructures.IsiSymbolTable;
+	import exceptions.IsiSemanticException;
+
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
