@@ -26,7 +26,4 @@ public abstract class IsiSymbol {
         return "IsiSymbol [name=" + name + "]";
     }
 
-
-
-
 }

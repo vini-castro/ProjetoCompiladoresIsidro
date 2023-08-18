@@ -18,15 +18,15 @@ Os arquivos serão gerados, e se der tudo certo, o código executara a entrada i
 
 | TASK | Realizar                                                         | Validacao Escrita | Validacao Java |
 |------|------------------------------------------------------------------|-------------------|----------------|
-| 1    | Possui 2 tipos de variáveis                                      |                   |                |
+| 1    | Possui 2 tipos de variáveis                                      | Pedro             | Bruno          |
 | 2    | Possui a estrutura If.. else                                     | OK                |                |
 | 3    | Possui estrutura de controle while/do while                      | OK                |                |
-| 4    | Operações Aritméticas executadas corretamente                    |                   |                |
-| 5    | Atribuições realizadas corretamente                              |                   |                |
+| 4    | Operações Aritméticas executadas corretamente                    | Fuji              |                |
+| 5    | Atribuições realizadas corretamente                              | Fuji              |                |
 | 6    | Possui operações de Entrada e Saída                              | OK                |                |
 | 7    | Aceita números decimais                                          | OK                |                |
 | 8    | Verificar se a variável já foi previamente declarada             | OK                |                |
 | 9    | Verificar se a variável foi declarada e não foi usada            | OK                |                |
-| 10   | Verificar se uma variável está sendo usada sem ter valor inicial |                   |                |
+| 10   | Verificar se uma variável está sendo usada sem ter valor inicial | Bacchi            |                |
 
 
