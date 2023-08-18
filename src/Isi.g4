@@ -86,7 +86,7 @@ cmdExpr : ID{ _varName = _input.LT(-1).getText();
 cmdIf : 'if' AP expr OP_REL expr FP '{' cmd+ '}' ('else' '{' cmd+ '}')?
 ;
 
-cmdWhile : 'while' AP expr OP_REL expr FP '{' cmd+ '}'
+cmdWhile : ('while' AP expr OP_REL expr FP '{' cmd+ '}') | ('do' '{' cmd+ '}' 'while' AP expr OP_REL expr FP Ponto)
 ;
 
 expr : termo (OP termo)*
