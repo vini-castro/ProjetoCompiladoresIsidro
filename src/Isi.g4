@@ -98,6 +98,7 @@ cmdAttr : ID {
                   }
                }
          )
+         Ponto
 ;
 
 //ID ':=' expr Ponto
