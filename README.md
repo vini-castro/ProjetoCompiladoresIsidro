@@ -10,6 +10,7 @@ Abra o cmd do windows, e digite cd <caminho até a pasta src> desse repositório
 
 Digite: antlr4 Isi.g4
 
+ou: java -cp ../antlr-4.7.2-complete.jar;. org.antlr.v4.Tool Isi.g4
 
 Os arquivos serão gerados, e se der tudo certo, o código executara a entrada input.isi, pelo metodo Main
 
