@@ -21,8 +21,8 @@ grammar Isi;
 prog : 'programa' declara+ bloco 'fimprog.'
 ;
 
-//declara : 'declare' ID (',' ID)* Ponto'
-declara : 'declare' ID {
+//declara : tipo ID (',' ID)* Ponto'
+declara : tipo ID {
                           _varName = _input.LT(-1).getText();
                           _varValue = null;
                           symbol = new IsiVariable(_varName, _tipo, _varValue);
@@ -47,10 +47,14 @@ declara : 'declare' ID {
               )* Ponto
 ;
 
+tipo  : 'numero' {_tipo = IsiVariable.NUMBER;}
+      | 'texto'  {_tipo = IsiVariable.TEXT;}
+      ;
+
 bloco : (cmd)+
 ;
 
-cmd : cmdLeitura | cmdEscrita | cmdExpr | cmdIf | cmdWhile
+cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdExpr | cmdIf | cmdWhile
 ;
 
 //cmdLeitura : 'leia' AP ID FP Ponto
@@ -72,6 +76,28 @@ cmdEscrita : 'escreva' ((AP TEXTO FP Ponto) | AP
                        }
                    }
                 FP Ponto)
+;
+
+cmdAttr : ID {
+               _varName = _input.LT(-1).getText();
+                       if (!symbolTable.exists(_varName)){
+                           throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
+                       }
+               int tipo = symbolTable.get(_varName).getType();
+         }
+         EQ (
+               NUMBER {
+                  if (tipo != IsiVariable.NUMBER){
+                     throw new IsiSemanticException("Simbolo '"+_varName+"' é um texto e não pode receber um número");
+                  }
+               }
+
+               | TEXTO {
+                  if (tipo != IsiVariable.TEXT){
+                     throw new IsiSemanticException("Simbolo '"+_varName+"' é um número e não pode receber um texto");
+                  }
+               }
+         )
 ;
 
 //ID ':=' expr Ponto
@@ -110,6 +136,9 @@ FP : ')'
 Ponto : '.'
 ;
 
+EQ: '='
+;
+
 OP : '+' | '-' | '*' | '/'
 ;
 
@@ -127,4 +156,7 @@ TEXTO: '"' ([a-z]|[A-Z]|[0-9]|' '|'\t'|'!'|'-')* '"'
 
 //white space
 WS : (' '| '\t' | '\n' | '\r')+ -> skip
+;
+
+COMMENT : '//' .*? ('\n' | '\r') -> skip
 ;
