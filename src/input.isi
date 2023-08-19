@@ -9,8 +9,19 @@ escreva ("Digite B").
 a = 123.
 e = "123".
 
-// b="asd" // -> Gera exceção
-// f=5 // -> Gera exceção
+a=b.
+e=f.
+
+b = a+2.
+b = 2+a.
+
+// c = e. // Exceção
+// c = a+b+e. // Exceção
+
+e = f.
+
+// d="asd". // -> Exceção
+// f=5. // -> Exceção
 
 while (a<b)
     {
