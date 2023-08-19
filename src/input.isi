@@ -1,9 +1,16 @@
 programa
-declare a,b,c,d.
+numero a,b,c,d.
+texto e, f.
 escreva("Programa Teste").
 escreva ("Digite A").
 leia (a).
 escreva ("Digite B").
+
+a = 123.
+e = "123".
+
+// b="asd" // -> Gera exceção
+// f=5 // -> Gera exceção
 
 while (a<b)
     {

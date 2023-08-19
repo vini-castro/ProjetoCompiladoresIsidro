@@ -25,5 +25,7 @@ public abstract class IsiSymbol {
     public String toString() {
         return "IsiSymbol [name=" + name + "]";
     }
-
+    
+    
+	public abstract int getType();
 }
