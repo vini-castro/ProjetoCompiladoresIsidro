@@ -16,6 +16,8 @@ grammar Isi;
     private String _varValue;
     private IsiSymbolTable symbolTable = new IsiSymbolTable();
     private IsiSymbol symbol;
+    private boolean _is_attr;
+    private int _tipo_attr;
 }
 
 prog : 'programa' declara+ bloco 'fimprog.'
@@ -78,27 +80,24 @@ cmdEscrita : 'escreva' ((AP TEXTO FP Ponto) | AP
                 FP Ponto)
 ;
 
-cmdAttr : ID {
+cmdAttr : {_is_attr = true; }
+         ID {
                _varName = _input.LT(-1).getText();
                        if (!symbolTable.exists(_varName)){
                            throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                        }
-               int tipo = symbolTable.get(_varName).getType();
+               _tipo_attr = symbolTable.get(_varName).getType();
          }
          EQ (
-               NUMBER {
-                  if (tipo != IsiVariable.NUMBER){
-                     throw new IsiSemanticException("Simbolo '"+_varName+"' é um texto e não pode receber um número");
-                  }
-               }
-
-               | TEXTO {
-                  if (tipo != IsiVariable.TEXT){
+               TEXTO {
+                  if (_tipo_attr == IsiVariable.NUMBER){
                      throw new IsiSemanticException("Simbolo '"+_varName+"' é um número e não pode receber um texto");
                   }
                }
+               | expr 
          )
          Ponto
+         {_is_attr = false; }
 ;
 
 //ID ':=' expr Ponto
@@ -122,6 +121,12 @@ expr : termo (OP termo)*
 termo : ID { _varName = _input.LT(-1).getText();
                if (!symbolTable.exists(_varName)){
                    throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
+               }
+            
+               int tipo = symbolTable.get(_varName).getType();
+
+               if (_is_attr && _tipo_attr != tipo){
+                  throw new IsiSemanticException("Os tipos não batem");
                }
             }
         | NUMBER
