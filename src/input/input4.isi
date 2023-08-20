@@ -1,0 +1,9 @@
+programa
+numero a,b,c,d.
+a = 3.
+b = 4.
+
+c = a + b.
+escreva(c).
+
+fimprog.

@@ -1,0 +1,7 @@
+programa
+numero a,b,c,d.
+texto e,f.
+
+a = 1.
+e = "oi".
+fimprog.

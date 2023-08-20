@@ -1,0 +1,12 @@
+programa
+numero a,b,c,d.
+a = 3.
+b = 4.
+if(a<b){
+    c = a + b.
+}
+else{
+    c = a - b.
+}
+
+fimprog.

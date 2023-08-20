@@ -1,0 +1,7 @@
+programa
+numero a,b,c,d.
+
+leia(a).
+escreva(a).
+
+fimprog.

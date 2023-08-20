@@ -10,7 +10,7 @@ public class Main {
             IsiLexer lexer;
             IsiParser parser;
 
-            lexer = new IsiLexer(CharStreams.fromFileName("src/input2.isi"));
+            lexer = new IsiLexer(CharStreams.fromFileName("src/input/inputProfessor.isi"));
 
             CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 

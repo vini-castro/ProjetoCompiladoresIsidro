@@ -1,0 +1,9 @@
+programa
+numero a.
+texto e.
+a = 3.
+e = "teste".
+escreva(a).
+escreva(e).
+
+fimprog.
