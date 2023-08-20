@@ -273,6 +273,9 @@ termo : ID { _varName = _input.LT(-1).getText();
                _exprContent += _input.LT(-1).getText();
             }
         | NUMBER {
+            if (_is_attr && _tipo_attr != IsiVariable.NUMBER){
+                  throw new IsiSemanticException("Simbolo '"+_varName+"' é um texto e não pode receber um número");
+            }
             _exprContent += _input.LT(-1).getText();
         }
 ;
