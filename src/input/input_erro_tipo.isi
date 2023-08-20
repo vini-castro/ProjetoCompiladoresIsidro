@@ -1,0 +1,18 @@
+programa
+numero a,b,c.
+texto e, f.
+
+a = "123". // Erro
+e = 123. // Erro
+
+escreva ("Digite b").
+leia (b).
+escreva ("Digite f").
+leia (f).
+
+c = a + b.
+
+escreva ("c e igual a").
+escreva (c).
+
+fimprog.

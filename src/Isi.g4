@@ -45,6 +45,13 @@ prog : 'programa' declara+ bloco 'fimprog.'
         {
             program.setVarTable(symbolTable);
             program.setComandos(stack.pop());
+
+            for (IsiSymbol symbol : symbolTable.getAll()){
+                if (!symbol.getInitialized()) {
+                    throw new IsiSemanticException("Simbolo '"+_varName+"' foi declarado e não foi usado");
+                }
+
+            }
         }
      ;
 
