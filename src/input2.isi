@@ -9,16 +9,14 @@ escreva ("Digite B").
 a = 123.
 e = "123".
 
-a=b.
-e=f.
+//a=b. // Exceção -> b não inicializado
+//e=f. // Exceção -> f não inicializado
 
 b = a+2.
 b = 2+a.
 
 // c = e. // Exceção
 // c = a+b+e. // Exceção
-
-e = f.
 
 // d="asd". // -> Exceção
 // f=5. // -> Exceção
@@ -31,6 +29,19 @@ else
     {
      c = a - b.
     }
+
+while (a < b)
+    {
+     a = a + 1.
+     c = c + 2.
+    }
+
+d = 0.
+do {
+    escreva (d).
+    d = d + 1.
+    }
+while (d < 10).
 
 escreva ("C e igual a").
 escreva (c).

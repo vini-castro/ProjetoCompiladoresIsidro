@@ -32,6 +32,8 @@ grammar Isi;
     private String _exprDecision;
     private ArrayList<AbstractCommand> listaTrue;
     private ArrayList<AbstractCommand> listaFalse;
+    private String _exprWhile;
+    private ArrayList<AbstractCommand> listaWhile;
 
     public void generateCode() {
         program.generateTarget();
@@ -186,13 +188,59 @@ cmdIf : 'if' AP {   _exprDecision = "";
                 {
                     listaFalse = stack.pop();
                     CommandDecisao cmd = new CommandDecisao(_exprDecision, listaTrue, listaFalse);
-                    System.out.println(_exprDecision);
                     stack.peek().add(cmd);
                 }
               )?
 ;
 
-cmdWhile : ('while' AP expr OP_REL expr FP '{' cmd+ '}') | ('do' '{' cmd+ '}' 'while' AP expr OP_REL expr FP Ponto)
+cmdWhile : ('while' AP { _exprWhile = "";
+                         _exprContent = "";
+                        }
+                    expr
+                    { _exprWhile += _exprContent;}
+                    OP_REL { _exprWhile += _input.LT(-1).getText();
+                             _exprContent = "";
+                           }
+                    expr
+                    { _exprWhile += _exprContent;}
+                    FP
+                    '{'
+                    {
+                        curThread = new ArrayList<AbstractCommand>();
+                        stack.push(curThread);
+                    }
+                     cmd+ '}'
+                    {
+                        listaWhile = stack.pop();
+                        CommandWhile cmd = new CommandWhile(_exprWhile, listaWhile);
+                        stack.peek().add(cmd);
+
+                    }
+                     )
+            | ('do'
+            '{'
+            {
+                curThread = new ArrayList<AbstractCommand>();
+                stack.push(curThread);
+            }
+            cmd+ '}'
+            'while' AP { _exprWhile = "";
+                        _exprContent = "";
+                       }
+            expr
+            { _exprWhile += _exprContent;}
+            OP_REL { _exprWhile += _input.LT(-1).getText();
+                    _exprContent = "";
+                  }
+            expr
+            { _exprWhile += _exprContent;}
+            FP Ponto
+            {
+                listaWhile = stack.pop();
+                CommandWhile cmd = new CommandDoWhile(_exprWhile, listaWhile);
+                stack.peek().add(cmd);
+            }
+            )
 ;
 
 expr : termo (
