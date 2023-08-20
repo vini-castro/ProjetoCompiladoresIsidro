@@ -27,7 +27,7 @@ prog : 'programa' declara+ bloco 'fimprog.'
 declara : tipo ID {
                           _varName = _input.LT(-1).getText();
                           _varValue = null;
-                          symbol = new IsiVariable(_varName, _tipo, _varValue);
+                          symbol = new IsiVariable(_varName, _tipo, _varValue, false);
                           if (!symbolTable.exists(_varName)){
                              symbolTable.add(symbol);
                           }
@@ -38,7 +38,7 @@ declara : tipo ID {
               (',' ID {
                           _varName = _input.LT(-1).getText();
                           _varValue = null;
-                          symbol = new IsiVariable(_varName, _tipo, _varValue);
+                          symbol = new IsiVariable(_varName, _tipo, _varValue, false);
                           if (!symbolTable.exists(_varName)){
                              symbolTable.add(symbol);
                           }
@@ -56,7 +56,7 @@ tipo  : 'numero' {_tipo = IsiVariable.NUMBER;}
 bloco : (cmd)+
 ;
 
-cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdExpr | cmdIf | cmdWhile
+cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdIf | cmdWhile
 ;
 
 //cmdLeitura : 'leia' AP ID FP Ponto
@@ -73,16 +73,19 @@ cmdLeitura : 'leia' AP
 //'escreva' ((AP TEXTO FP Ponto) | AP ID FP Ponto)
 cmdEscrita : 'escreva' ((AP TEXTO FP Ponto) | AP
                 ID{ _varName = _input.LT(-1).getText();
-                       if (!symbolTable.exists(_varName)){
+                        if (!symbolTable.exists(_varName)){
                            throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
-                       }
+                        }
+                        if (!symbolTable.hasValue(_varName)){
+                           throw new IsiSemanticException("Simbolo '"+_varName+"' não inicializado");
+                        }
                    }
                 FP Ponto)
 ;
 
 cmdAttr : {_is_attr = true; }
          ID {
-               _varName = _input.LT(-1).getText();
+               String _varName = _input.LT(-1).getText();
                        if (!symbolTable.exists(_varName)){
                            throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                        }
@@ -97,16 +100,11 @@ cmdAttr : {_is_attr = true; }
                | expr 
          )
          Ponto
-         {_is_attr = false; }
-;
+         {
+            symbolTable.get(_varName).setInitialized(true);
+            _is_attr = false;
 
-//ID ':=' expr Ponto
-cmdExpr : ID{ _varName = _input.LT(-1).getText();
-               if (!symbolTable.exists(_varName)){
-                   throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
-               }
-             }
-          ':=' expr Ponto
+         }
 ;
 
 cmdIf : 'if' AP expr OP_REL expr FP '{' cmd+ '}' ('else' '{' cmd+ '}')?
@@ -121,6 +119,10 @@ expr : termo (OP termo)*
 termo : ID { _varName = _input.LT(-1).getText();
                if (!symbolTable.exists(_varName)){
                    throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
+               }
+
+               if (!symbolTable.hasValue(_varName)){
+                  throw new IsiSemanticException("Simbolo '"+_varName+"' não inicializado");
                }
             
                int tipo = symbolTable.get(_varName).getType();

@@ -28,4 +28,7 @@ public abstract class IsiSymbol {
     
     
 	public abstract int getType();
+	public abstract String getValue();
+	public abstract void setInitialized(boolean value);
+	public abstract boolean getInitialized();
 }

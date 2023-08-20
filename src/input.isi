@@ -9,28 +9,34 @@ escreva ("Digite B").
 a = 123.
 e = "123".
 
-a=b.
-e=f.
+// a =  e + b // Exceção de tipos
+// a =  b + e // Exceção sem valor inicial
+
+// a=b. // Exceção sem valor inicial
+// e=f. // Exceção sem valor inicial
 
 b = a+2.
 b = 2+a.
 
-// c = e. // Exceção
-// c = a+b+e. // Exceção
+// c = e. // Exceção tipo
+// c = a+b+e. // Exceção tipo
 
+f = "2".
 e = f.
 
-// d="asd". // -> Exceção
-// f=5. // -> Exceção
+// d="asd". // -> Exceção tipo
+// f=5. // -> Exceção tipo
 
 while (a<b)
     {
-     c := a + b.
+     c = a + b.
     }
+
+// escreva(d) // Exceção sem valor inicial
 
 escreva ("C e igual a").
 escreva (c).
-d := c * a + b.
+d = c * a + b.
 escreva ("D e igual a").
 escreva (d).
 fimprog.
