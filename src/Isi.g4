@@ -158,7 +158,6 @@ cmdAttr : {_is_attr = true; }
          )
          Ponto
          {
-            System.out.println(_varName);
             symbolTable.get(_varName).setInitialized(true);
             _is_attr = false;
             CommandAtribuicao cmd = new CommandAtribuicao(_exprID, _exprContent);
