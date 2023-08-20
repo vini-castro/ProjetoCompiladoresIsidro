@@ -48,7 +48,7 @@ prog : 'programa' declara+ bloco 'fimprog.'
 
             for (IsiSymbol symbol : symbolTable.getAll()){
                 if (!symbol.getInitialized()) {
-                    throw new IsiSemanticException("Simbolo '"+_varName+"' foi declarado e não foi usado");
+                    throw new IsiSemanticException("Simbolo '"+symbol.getName()+"' foi declarado e não foi usado");
                 }
 
             }
@@ -158,6 +158,7 @@ cmdAttr : {_is_attr = true; }
          )
          Ponto
          {
+            System.out.println(_varName);
             symbolTable.get(_varName).setInitialized(true);
             _is_attr = false;
             CommandAtribuicao cmd = new CommandAtribuicao(_exprID, _exprContent);
