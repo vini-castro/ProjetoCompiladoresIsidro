@@ -15,6 +15,7 @@ grammar Isi;
 	import ast.CmdLeitura;
 	import ast.CmdEscrita;
 	import ast.CmdIf;
+	import ast.CmdExpr;
 	import java.util.ArrayList;
 }
 
@@ -85,7 +86,7 @@ bloco : {
 }(cmd)+
 ;
 
-cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdExpr | cmdIf | cmdWhile
+cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdIf | cmdWhile
 ;
 
 //cmdLeitura : 'leia' AP ID FP Ponto
@@ -144,15 +145,6 @@ cmdAttr : {_is_attr = true; }
          {_is_attr = false;
          CmdAttr cmd = new CmdAttr(_varName, _exprContent);
          stack.peek().add(cmd);}
-;
-
-//ID '=' expr Ponto
-cmdExpr : ID{ _varName = _input.LT(-1).getText();
-               if (!symbolTable.exists(_varName)){
-                   throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
-               }
-             }
-          '=' expr Ponto
 ;
 
 cmdIf : 'if' AP

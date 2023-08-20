@@ -5,18 +5,19 @@ escreva("Programa Teste").
 escreva ("Digite A").
 leia (a).
 escreva ("Digite B").
+leia(b).
 
-if (a<b) {
-     c = a + b.
-    }
+
+if(a<b){
+c = b + a.
+}
 else{
-     c = a-b.
+c = b - a.
 }
 
-escreva ("C e igual a").
+escreva ("C e igual a ").
 escreva (c).
-leia(b).
 d = c * a + b.
-escreva ("D e igual a").
+escreva ("D e igual a ").
 escreva (d).
 fimprog.
