@@ -18,9 +18,12 @@ public class Main {
 
             parser.prog();
 
+            parser.generateCode();
+
             System.out.println("Compilacao bem sucedida");
         }
         catch(Exception e){
+            e.printStackTrace();
             System.out.println("Existe uma exception: "+e.getMessage());
         }
     }

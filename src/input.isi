@@ -6,31 +6,17 @@ escreva ("Digite A").
 leia (a).
 escreva ("Digite B").
 
-a = 123.
-e = "123".
-
-a=b.
-e=f.
-
-b = a+2.
-b = 2+a.
-
-// c = e. // Exceção
-// c = a+b+e. // Exceção
-
-e = f.
-
-// d="asd". // -> Exceção
-// f=5. // -> Exceção
-
-while (a<b)
-    {
-     c := a + b.
+if (a<b) {
+     c = a + b.
     }
+else{
+     c = a-b.
+}
 
 escreva ("C e igual a").
 escreva (c).
-d := c * a + b.
+leia(b).
+d = c * a + b.
 escreva ("D e igual a").
 escreva (d).
 fimprog.

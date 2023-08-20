@@ -4,10 +4,18 @@
 grammar Isi;
 
 @header{
+    import java.util.Stack;
 	import datastructures.IsiSymbol;
 	import datastructures.IsiVariable;
 	import datastructures.IsiSymbolTable;
+	import ast.Program;
 	import exceptions.IsiSemanticException;
+	import ast.AbstractCommand;
+	import ast.CmdAttr;
+	import ast.CmdLeitura;
+	import ast.CmdEscrita;
+	import ast.CmdIf;
+	import java.util.ArrayList;
 }
 
 @members{
@@ -15,12 +23,29 @@ grammar Isi;
     private String _varName;
     private String _varValue;
     private IsiSymbolTable symbolTable = new IsiSymbolTable();
+    private Program program = new Program();
+    private Stack<ArrayList<AbstractCommand>> stack = new Stack<ArrayList<AbstractCommand>>();
     private IsiSymbol symbol;
     private boolean _is_attr;
     private int _tipo_attr;
+    private ArrayList<AbstractCommand> listaTrue;
+    private ArrayList<AbstractCommand> listaFalse;
+    private ArrayList<AbstractCommand> curThread;
+    private String _readID;
+    private String _exprID;
+    private String _exprIf;
+    private String _writeID;
+    private String _exprContent;
+
+    public void generateCode(){
+        program.generateTarget();
+    }
 }
 
 prog : 'programa' declara+ bloco 'fimprog.'
+           {  program.setVarTable(symbolTable);
+           	  program.setComandos(stack.pop());
+           }
 ;
 
 //declara : tipo ID (',' ID)* Ponto'
@@ -53,7 +78,11 @@ tipo  : 'numero' {_tipo = IsiVariable.NUMBER;}
       | 'texto'  {_tipo = IsiVariable.TEXT;}
       ;
 
-bloco : (cmd)+
+bloco : {
+            { curThread = new ArrayList<AbstractCommand>();
+              stack.push(curThread);
+            }
+}(cmd)+
 ;
 
 cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdExpr | cmdIf | cmdWhile
@@ -65,19 +94,33 @@ cmdLeitura : 'leia' AP
                             if (!symbolTable.exists(_varName)){
                                 throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                             }
+                            _readID = _input.LT(-1).getText();
                        }
                     FP
-                    Ponto
+                    Ponto{
+                        IsiVariable var = (IsiVariable)symbolTable.get(_readID);
+                        CmdLeitura cmd = new CmdLeitura(_readID, var);
+                        stack.peek().add(cmd);
+                    }
 ;
 
 //'escreva' ((AP TEXTO FP Ponto) | AP ID FP Ponto)
-cmdEscrita : 'escreva' ((AP TEXTO FP Ponto) | AP
+cmdEscrita : 'escreva' ((AP TEXTO{
+                        _writeID = _input.LT(-1).getText();
+                         } FP Ponto{
+                             CmdEscrita cmd = new CmdEscrita(_writeID);
+                             stack.peek().add(cmd);
+                         }) | AP
                 ID{ _varName = _input.LT(-1).getText();
                        if (!symbolTable.exists(_varName)){
                            throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                        }
+                       _writeID = _input.LT(-1).getText();
                    }
-                FP Ponto)
+                FP Ponto{
+                CmdEscrita cmd = new CmdEscrita(_writeID);
+                stack.peek().add(cmd);
+                })
 ;
 
 cmdAttr : {_is_attr = true; }
@@ -87,41 +130,64 @@ cmdAttr : {_is_attr = true; }
                            throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                        }
                _tipo_attr = symbolTable.get(_varName).getType();
+               _writeID = _input.LT(-1).getText();
          }
-         EQ (
+         EQ {_exprContent = "";} (
                TEXTO {
                   if (_tipo_attr == IsiVariable.NUMBER){
                      throw new IsiSemanticException("Simbolo '"+_varName+"' é um número e não pode receber um texto");
                   }
                }
-               | expr 
+               | expr
          )
          Ponto
-         {_is_attr = false; }
+         {_is_attr = false;
+         CmdAttr cmd = new CmdAttr(_varName, _exprContent);
+         stack.peek().add(cmd);}
 ;
 
-//ID ':=' expr Ponto
+//ID '=' expr Ponto
 cmdExpr : ID{ _varName = _input.LT(-1).getText();
                if (!symbolTable.exists(_varName)){
                    throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                }
              }
-          ':=' expr Ponto
+          '=' expr Ponto
 ;
 
-cmdIf : 'if' AP expr OP_REL expr FP '{' cmd+ '}' ('else' '{' cmd+ '}')?
+cmdIf : 'if' AP
+            expr { _exprIf = _input.LT(-1).getText(); }
+            OP_REL { _exprIf += _input.LT(-1).getText(); }
+             expr {_exprIf += _input.LT(-1).getText(); }
+              FP
+              '{' {
+              { curThread = new ArrayList<AbstractCommand>();
+               stack.push(curThread); }}
+                cmd+
+                '}' { listaTrue = stack.pop(); }
+                 ('else'
+                    '{' {curThread = new ArrayList<AbstractCommand>();
+                          stack.push(curThread); }
+                       cmd+
+                       '}'{
+                            listaFalse = stack.pop();
+                            CmdIf cmd = new CmdIf(_exprIf, listaTrue, listaFalse);
+                            stack.peek().add(cmd);}
+                            )?
 ;
 
 cmdWhile : ('while' AP expr OP_REL expr FP '{' cmd+ '}') | ('do' '{' cmd+ '}' 'while' AP expr OP_REL expr FP Ponto)
 ;
 
-expr : termo (OP termo)*
+expr : termo (OP { _exprContent += _input.LT(-1).getText();}
+        termo)*
 ;
 
 termo : ID { _varName = _input.LT(-1).getText();
                if (!symbolTable.exists(_varName)){
                    throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                }
+               _exprContent += _input.LT(-1).getText();
             
                int tipo = symbolTable.get(_varName).getType();
 
@@ -129,7 +195,7 @@ termo : ID { _varName = _input.LT(-1).getText();
                   throw new IsiSemanticException("Os tipos não batem");
                }
             }
-        | NUMBER
+        | NUMBER {_exprContent += _input.LT(-1).getText();}
 ;
 
 //Abre parenteses
@@ -137,6 +203,12 @@ AP : '('
 ;
 
 FP : ')'
+;
+
+AC : '{'
+;
+
+FC : '}'
 ;
 
 Ponto : '.'
