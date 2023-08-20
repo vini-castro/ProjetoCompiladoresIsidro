@@ -1,6 +1,6 @@
 programa
-numero a,b,c,d.
-texto e,f.
+numero a.
+texto e.
 
 a = 1.
 e = "oi".

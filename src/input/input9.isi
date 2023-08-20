@@ -4,6 +4,5 @@ b = 5.
 c = 6.
 
 a = b + c.
-escreva(a).
 
 fimprog.
