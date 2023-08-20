@@ -21,6 +21,10 @@ public class IsiSymbolTable {
         return map.get(symbolName) != null;
     }
 
+    public boolean hasValue(String symbolName) {
+        return map.get(symbolName).getInitialized();
+    }
+
     public IsiSymbol get(String symbolName) {
         return map.get(symbolName);
     }

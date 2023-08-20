@@ -50,7 +50,7 @@ prog : 'programa' declara+ bloco 'fimprog.'
 declara : tipo ID {
                           _varName = _input.LT(-1).getText();
                           _varValue = null;
-                          symbol = new IsiVariable(_varName, _tipo, _varValue);
+                          symbol = new IsiVariable(_varName, _tipo, _varValue, false);
                           if (!symbolTable.exists(_varName)){
                              symbolTable.add(symbol);
                           }
@@ -61,7 +61,7 @@ declara : tipo ID {
               (',' ID {
                           _varName = _input.LT(-1).getText();
                           _varValue = null;
-                          symbol = new IsiVariable(_varName, _tipo, _varValue);
+                          symbol = new IsiVariable(_varName, _tipo, _varValue, false);
                           if (!symbolTable.exists(_varName)){
                              symbolTable.add(symbol);
                           }
@@ -83,7 +83,7 @@ bloco : {
         (cmd)+
 ;
 
-cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdExpr | cmdIf | cmdWhile
+cmd : cmdLeitura | cmdEscrita | cmdAttr | cmdIf | cmdWhile
 ;
 
 //cmdLeitura : 'leia' AP ID FP Ponto
@@ -97,6 +97,7 @@ cmdLeitura : 'leia' AP
                     FP
                     Ponto
                     {
+                        symbolTable.get(_varName).setInitialized(true);
                         IsiVariable var = (IsiVariable) symbolTable.get(_readID);
                         CommandLeitura cmd = new CommandLeitura(_readID, var);
                         stack.peek().add(cmd);
@@ -111,10 +112,13 @@ cmdEscrita : 'escreva' ((AP
                 FP Ponto)
                 | (AP
                 ID{ _varName = _input.LT(-1).getText();
-                       if (!symbolTable.exists(_varName)){
+                        if (!symbolTable.exists(_varName)){
                            throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
-                       }
-                       _writeID = _input.LT(-1).getText();
+                        }
+                        if (!symbolTable.hasValue(_varName)){
+                           throw new IsiSemanticException("Simbolo '"+_varName+"' não inicializado");
+                        }
+                        _writeID = _input.LT(-1).getText();
                    }
                 FP Ponto))
                 {
@@ -126,7 +130,7 @@ cmdEscrita : 'escreva' ((AP
 
 cmdAttr : {_is_attr = true; }
          ID {
-               _varName = _input.LT(-1).getText();
+               String _varName = _input.LT(-1).getText();
                        if (!symbolTable.exists(_varName)){
                            throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                        }
@@ -144,19 +148,12 @@ cmdAttr : {_is_attr = true; }
                | expr 
          )
          Ponto
-         {_is_attr = false;
-          CommandAtribuicao cmd = new CommandAtribuicao(_exprID, _exprContent);
-          stack.peek().add(cmd);
+         {
+            symbolTable.get(_varName).setInitialized(true);
+            _is_attr = false;
+            CommandAtribuicao cmd = new CommandAtribuicao(_exprID, _exprContent);
+            stack.peek().add(cmd);
           }
-;
-
-//ID ':=' expr Ponto
-cmdExpr : ID{ _varName = _input.LT(-1).getText();
-               if (!symbolTable.exists(_varName)){
-                   throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
-               }
-             }
-          ':=' expr Ponto
 ;
 
 cmdIf : 'if' AP {   _exprDecision = "";
@@ -207,7 +204,11 @@ termo : ID { _varName = _input.LT(-1).getText();
                if (!symbolTable.exists(_varName)){
                    throw new IsiSemanticException("Simbolo '"+_varName+"' nao declarado no escopo");
                }
-            
+
+               if (!symbolTable.hasValue(_varName)){
+                  throw new IsiSemanticException("Simbolo '"+_varName+"' não inicializado");
+               }
+
                int tipo = symbolTable.get(_varName).getType();
 
                if (_is_attr && _tipo_attr != tipo){

@@ -7,11 +7,13 @@ public class IsiVariable extends IsiSymbol {
 
     private int type;
     private String value;
+    private boolean initialized;
 
-    public IsiVariable(String name, int type, String value) {
+    public IsiVariable(String name, int type, String value, boolean initialized) {
         super(name);
         this.type = type;
         this.value = value;
+        this.initialized = initialized;
     }
 
     public int getType() {
@@ -28,6 +30,14 @@ public class IsiVariable extends IsiSymbol {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public boolean getInitialized() {
+        return this.initialized;
+    }
+
+    public void setInitialized(boolean value) {
+        this.initialized = value;
     }
 
     @Override
