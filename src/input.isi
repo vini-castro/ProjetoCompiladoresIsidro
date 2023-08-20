@@ -5,14 +5,14 @@ escreva("Programa Teste").
 escreva ("Digite A").
 leia (a).
 escreva ("Digite B").
+leia (b).
 
 a = 123.
 e = "123".
 
 // a =  e + b // Exceção de tipos
-// a =  b + e // Exceção sem valor inicial
 
-// a=b. // Exceção sem valor inicial
+a =  b.
 // e=f. // Exceção sem valor inicial
 
 b = a+2.

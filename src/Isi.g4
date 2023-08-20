@@ -68,6 +68,7 @@ cmdLeitura : 'leia' AP
                        }
                     FP
                     Ponto
+                    {symbolTable.get(_varName).setInitialized(true);}
 ;
 
 //'escreva' ((AP TEXTO FP Ponto) | AP ID FP Ponto)
