@@ -10,7 +10,7 @@ public class Main {
             IsiLexer lexer;
             IsiParser parser;
 
-            lexer = new IsiLexer(CharStreams.fromFileName("src/input.isi"));
+            lexer = new IsiLexer(CharStreams.fromFileName("src/input2.isi"));
 
             CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 
@@ -19,6 +19,8 @@ public class Main {
             parser.prog();
 
             System.out.println("Compilacao bem sucedida");
+
+            parser.generateCode();
         }
         catch(Exception e){
             System.out.println("Existe uma exception: "+e.getMessage());
