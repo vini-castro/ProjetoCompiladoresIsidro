@@ -237,7 +237,7 @@ cmdWhile : ('while' AP { _exprWhile = "";
             FP Ponto
             {
                 listaWhile = stack.pop();
-                CommandWhile cmd = new CommandDoWhile(_exprWhile, listaWhile);
+                CommandDoWhile cmd = new CommandDoWhile(_exprWhile, listaWhile);
                 stack.peek().add(cmd);
             }
             )
